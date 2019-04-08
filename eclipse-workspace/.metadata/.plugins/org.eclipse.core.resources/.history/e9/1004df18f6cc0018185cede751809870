@@ -1,0 +1,176 @@
+package br.edu.ifcvideira.Lista14r;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class E3Principal extends JFrame {
+	
+
+	private JPanel contentPane;
+	private JTextField tfLarP;
+	private JTextField tfAltP;
+	private JTextField tfAltAz;
+	private JTextField tfLargAz;
+	private JTextField tfResposta;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	
+	
+	E3Azulejo az = new E3Azulejo();
+	E3Parede pr = new E3Parede();
+	
+	double lAz;
+	double aAz;
+	double lPr;
+	double aPr;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					E3Principal frame = new E3Principal();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public E3Principal() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 536, 431);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblCalculadoraDeAzuleijos = new JLabel("Calculadora de Azuleijos");
+		lblCalculadoraDeAzuleijos.setFont(new Font("Arial", Font.ITALIC, 15));
+		lblCalculadoraDeAzuleijos.setBounds(170, 11, 160, 18);
+		contentPane.add(lblCalculadoraDeAzuleijos);
+		
+		tfLarP = new JTextField();
+		tfLarP.setBounds(170, 57, 86, 20);
+		contentPane.add(tfLarP);
+		tfLarP.setColumns(10);
+		
+		tfAltP = new JTextField();
+		tfAltP.setBounds(266, 57, 86, 20);
+		contentPane.add(tfAltP);
+		tfAltP.setColumns(10);
+		
+		JLabel lblLargura = new JLabel("Largura");
+		lblLargura.setBounds(192, 40, 46, 14);
+		contentPane.add(lblLargura);
+		
+		JLabel lblAltura = new JLabel("Altura");
+		lblAltura.setBounds(293, 40, 46, 14);
+		contentPane.add(lblAltura);
+		
+		JLabel lblParede = new JLabel("Parede");
+		lblParede.setBounds(96, 60, 46, 14);
+		contentPane.add(lblParede);
+		
+		tfAltAz = new JTextField();
+		tfAltAz.setColumns(10);
+		tfAltAz.setBounds(266, 88, 86, 20);
+		contentPane.add(tfAltAz);
+		
+		tfLargAz = new JTextField();
+		tfLargAz.setColumns(10);
+		tfLargAz.setBounds(170, 88, 86, 20);
+		contentPane.add(tfLargAz);
+		
+		JLabel lblAzulejo = new JLabel("Azulejo");
+		lblAzulejo.setBounds(96, 91, 46, 14);
+		contentPane.add(lblAzulejo);
+		
+		JLabel lblAzuleijosNecessrios = new JLabel("Azuleijos \r\nnecess\u00E1rios");
+		lblAzuleijosNecessrios.setBounds(58, 217, 102, 18);
+		contentPane.add(lblAzuleijosNecessrios);
+		
+		tfResposta = new JTextField();
+		tfResposta.setEditable(false);
+		tfResposta.setBounds(170, 217, 182, 18);
+		contentPane.add(tfResposta);
+		tfResposta.setColumns(10);
+		
+		JRadioButton rbQuad = new JRadioButton("Quadrado");
+		rbQuad.setSelected(true);
+		buttonGroup.add(rbQuad);
+		rbQuad.setBounds(170, 115, 109, 23);
+		contentPane.add(rbQuad);
+		
+		JRadioButton rbRet = new JRadioButton("Ret\u00E2ngular");
+		buttonGroup.add(rbRet);
+		rbRet.setBounds(170, 141, 109, 23);
+		contentPane.add(rbRet);
+		
+		JRadioButton rbTriSame = new JRadioButton("Triangular de lados iguais");
+		buttonGroup.add(rbTriSame);
+		rbTriSame.setBounds(170, 167, 224, 20);
+		contentPane.add(rbTriSame);
+		
+		JRadioButton rbTriDif = new JRadioButton("Triangular de lados diferentes");
+		buttonGroup.add(rbTriDif);
+		rbTriDif.setBounds(170, 190, 218, 20);
+		contentPane.add(rbTriDif);
+		
+		JButton btCalcular = new JButton("Calcular ");
+		btCalcular.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				lAz = Double.parseDouble(tfLargAz.getText());
+				aAz = Double.parseDouble(tfAltAz.getText());
+				aPr = Double.parseDouble(tfAltP.getText());
+				lPr = Double.parseDouble(tfLarP.getText());
+				
+				pr.setAlturaParede(aPr);
+				pr.setLarguraParede(lPr);
+				az.setAlturaAz(aAz);
+				az.setLarguraAz(lAz);
+				
+				if(rbQuad.isSelected()) {
+					tfResposta.setText(""+pr.areaParede()/az.azQuad());
+				}else if(rbRet.isSelected()) {
+					tfResposta.setText(""+pr.areaParede()/az.azQuad());
+				}else if(rbTriDif.isSelected()) {
+					tfResposta.setText(""+pr.areaParede()/az.azTriDif());
+				}else if(rbTriSame.isSelected()) {
+					tfResposta.setText(""+pr.areaParede()/az.azTriSame());
+				}
+			}
+		});
+		btCalcular.setBounds(170, 246, 182, 23);
+		contentPane.add(btCalcular);
+		
+		JLabel lblCm = new JLabel("cm");
+		lblCm.setBounds(379, 60, 46, 14);
+		contentPane.add(lblCm);
+		
+		JLabel label = new JLabel("cm");
+		label.setBounds(379, 91, 46, 14);
+		contentPane.add(label);
+		
+		JLabel label_1 = new JLabel("cm");
+		label_1.setBounds(379, 219, 46, 14);
+		contentPane.add(label_1);
+	}
+}

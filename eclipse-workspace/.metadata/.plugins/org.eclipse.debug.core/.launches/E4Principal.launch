@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/programacao1/src/br/edu/ifcvideira/Lista14r/E4Principal.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="br.edu.ifcvideira.Lista14r.E4Principal"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="programacao1"/>
+</launchConfiguration>

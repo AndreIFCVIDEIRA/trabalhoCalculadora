@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.lang.Integer"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.Lista14r.E4Parente"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.Lista14r.E4ColegaDeTrabalho"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.Lista14r.E4Amigo"/>
+<fullyQualifiedTypeName name="java.lang.Float"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.Lista14r.E4Pessoa"/>
+<fullyQualifiedTypeName name="java.lang.Double"/>
+<fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.beans.Clientes"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.DAOs.ClientesDao"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.beans.Produtos"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.controllers.views.CategoriasView"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.controllers.views.ClientesView"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.controllers.views.FornecedoresView"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.controllers.views.ProdutosView"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.controllers.views.UsuarioView"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.beans.Vendas"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.DAOs.VendasDao"/>
+<fullyQualifiedTypeName name="br.edu.ifcvideira.controllers.views.VendasView"/>
+</qualifiedTypeNameHistroy>

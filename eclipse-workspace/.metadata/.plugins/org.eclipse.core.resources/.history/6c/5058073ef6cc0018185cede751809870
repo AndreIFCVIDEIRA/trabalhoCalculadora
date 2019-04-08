@@ -1,0 +1,138 @@
+package br.edu.ifcvideira.Lista14r;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JSeparator;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.event.PopupMenuEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class E2Principal extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField TFano;
+	private JTextField TFdesc;
+	private JTextField TFprec;
+	private JTextField TFcap;
+	JComboBox CBveiculo = new JComboBox();
+	E2Automovel au = new E2Automovel();
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					E2Principal frame = new E2Principal();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public E2Principal() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 324);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		TFano = new JTextField();
+		TFano.setBounds(215, 70, 86, 20);
+		contentPane.add(TFano);
+		TFano.setColumns(10);
+		
+		JLabel lblAno = new JLabel("Ano");
+		lblAno.setFont(new Font("ISOCTEUR", Font.PLAIN, 18));
+		lblAno.setBounds(58, 73, 46, 14);
+		contentPane.add(lblAno);
+		
+		JLabel lblDescrio = new JLabel("Descri\u00E7\u00E3o");
+		lblDescrio.setFont(new Font("ISOCTEUR", Font.PLAIN, 18));
+		lblDescrio.setBounds(58, 117, 124, 17);
+		contentPane.add(lblDescrio);
+		
+		TFdesc = new JTextField();
+		TFdesc.setColumns(10);
+		TFdesc.setBounds(215, 114, 86, 20);
+		contentPane.add(TFdesc);
+		
+		JLabel lblPreo = new JLabel("Pre\u00E7o");
+		lblPreo.setFont(new Font("ISOCTEUR", Font.PLAIN, 18));
+		lblPreo.setBounds(58, 156, 75, 17);
+		contentPane.add(lblPreo);
+		
+		TFprec = new JTextField();
+		TFprec.setColumns(10);
+		TFprec.setBounds(215, 154, 86, 20);
+		contentPane.add(TFprec);
+		
+		JLabel lblCapacidade = new JLabel("Capacidade");
+		lblCapacidade.setFont(new Font("ISOCTEUR", Font.PLAIN, 18));
+		lblCapacidade.setBounds(58, 204, 147, 20);
+		contentPane.add(lblCapacidade);
+		
+		TFcap = new JTextField();
+		TFcap.setEditable(false);
+		TFcap.setColumns(10);
+		TFcap.setBounds(215, 201, 86, 20);
+		contentPane.add(TFcap);
+		
+		JButton BTNcalc = new JButton("Calcular\r\n");
+		BTNcalc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if (CBveiculo.getSelectedIndex()==0) {
+					au.setAno(Integer.parseInt(TFano.getText()));
+					au.setDescricao(String.valueOf(TFdesc.getText()));
+					au.setValor(Double.parseDouble(TFprec.getText()));
+					
+					JOptionPane.showMessageDialog(null, "o veiculo "+au.getDescricao()+" custa: R$ "+ au.valorAtual()+" o seguro custa: R$ "+ au.valorSeguro()+ " o valor do IPVA é: R$ "+au.valorIPVA() );
+				}
+			}
+		});
+		BTNcalc.setFont(new Font("ISOCTEUR", Font.PLAIN, 18));
+		BTNcalc.setBounds(261, 242, 163, 32);
+		contentPane.add(BTNcalc);
+		
+		
+		CBveiculo.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+				if (CBveiculo.getSelectedIndex()==0){
+					TFcap.setEditable(false);
+				}else if (CBveiculo.getSelectedIndex()==1){
+					TFcap.setEditable(false);
+				}else {
+					TFcap.setEditable(true);
+				}
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+			}
+		});
+		CBveiculo.setModel(new DefaultComboBoxModel(new String[] {"Autom\u00F3vel", "Moto", "Caminh\u00E3o"}));
+		CBveiculo.setBounds(149, 11, 124, 20);
+		contentPane.add(CBveiculo);
+	}
+}

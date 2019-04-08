@@ -1,0 +1,440 @@
+package br.edu.ifcvideira.controllers.views;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.JButton;
+import java.awt.Color;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import br.edu.ifcvideira.DAOs.FornecedoresDao;
+import br.edu.ifcvideira.beans.Fornecedores;
+
+import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
+
+public class FornecedoresView extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField textID;
+	private JTextField textNome;
+	private JTextField textCNPJ;
+	private JTextField textTelefone;
+	private JLabel lblEmail;
+	private JTextField textEmail;
+	private JLabel lblRua;
+	private JTextField textRua;
+	private JLabel lblBairro;
+	private JTextField textBairro;
+	private JLabel lblCidade;
+	private JTextField textCidade;
+	private JLabel lblEstado;
+	private JTextField textEstado;
+	private JLabel lblNewLabel;
+	private JLabel lblBuscar;
+	private JTextField textBuscarID;
+	private JTextField textBuscarNome;
+	private JTable table;
+	private JButton btnNewButton;
+	private JButton btnAlterar;
+	private JButton btnLimpar;
+	private JButton btnExcluir;
+	
+	private List<Object> fornecedor = new ArrayList<Object>();
+	
+	Fornecedores fo = new Fornecedores();
+	FornecedoresDao foDao = new FornecedoresDao();
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					FornecedoresView frame = new FornecedoresView();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public FornecedoresView() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				atualizarTabela();
+			}
+		});
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 780, 751);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblCdigo = new JLabel("C\u00F3digo:");
+		lblCdigo.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblCdigo.setBounds(10, 73, 85, 18);
+		contentPane.add(lblCdigo);
+		
+		textID = new JTextField();
+		textID.setEditable(false);
+		textID.setColumns(10);
+		textID.setBounds(102, 73, 258, 20);
+		contentPane.add(textID);
+		
+		JLabel lblNome = new JLabel("Nome:");
+		lblNome.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNome.setBounds(10, 102, 85, 18);
+		contentPane.add(lblNome);
+		
+		textNome = new JTextField();
+		textNome.setColumns(10);
+		textNome.setBounds(102, 102, 258, 20);
+		contentPane.add(textNome);
+		
+		JLabel lblCnpj = new JLabel("CNPJ:");
+		lblCnpj.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblCnpj.setBounds(10, 131, 85, 18);
+		contentPane.add(lblCnpj);
+		
+		textCNPJ = new JTextField();
+		textCNPJ.setColumns(10);
+		textCNPJ.setBounds(102, 131, 258, 20);
+		contentPane.add(textCNPJ);
+		
+		JLabel lblTelefone = new JLabel("Telefone:");
+		lblTelefone.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblTelefone.setBounds(10, 193, 85, 18);
+		contentPane.add(lblTelefone);
+		
+		textTelefone = new JTextField();
+		textTelefone.setColumns(10);
+		textTelefone.setBounds(102, 193, 258, 20);
+		contentPane.add(textTelefone);
+		
+		lblEmail = new JLabel("E-mail:");
+		lblEmail.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblEmail.setBounds(10, 162, 85, 18);
+		contentPane.add(lblEmail);
+		
+		textEmail = new JTextField();
+		textEmail.setColumns(10);
+		textEmail.setBounds(102, 162, 258, 20);
+		contentPane.add(textEmail);
+		
+		lblRua = new JLabel("Rua:");
+		lblRua.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblRua.setBounds(409, 73, 85, 18);
+		contentPane.add(lblRua);
+		
+		textRua = new JTextField();
+		textRua.setColumns(10);
+		textRua.setBounds(501, 73, 258, 20);
+		contentPane.add(textRua);
+		
+		lblBairro = new JLabel("Bairro:");
+		lblBairro.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblBairro.setBounds(409, 104, 85, 18);
+		contentPane.add(lblBairro);
+		
+		textBairro = new JTextField();
+		textBairro.setColumns(10);
+		textBairro.setBounds(501, 104, 258, 20);
+		contentPane.add(textBairro);
+		
+		lblCidade = new JLabel("Cidade:");
+		lblCidade.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblCidade.setBounds(409, 133, 85, 18);
+		contentPane.add(lblCidade);
+		
+		textCidade = new JTextField();
+		textCidade.setColumns(10);
+		textCidade.setBounds(501, 133, 258, 20);
+		contentPane.add(textCidade);
+		
+		lblEstado = new JLabel("Estado:");
+		lblEstado.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblEstado.setBounds(409, 160, 85, 18);
+		contentPane.add(lblEstado);
+		
+		textEstado = new JTextField();
+		textEstado.setColumns(10);
+		textEstado.setBounds(501, 160, 258, 20);
+		contentPane.add(textEstado);
+		
+		lblNewLabel = new JLabel("Cadastrar Fornecedor\r\n");
+		lblNewLabel.setForeground(Color.BLUE);
+		lblNewLabel.setFont(new Font("Microsoft JhengHei UI Light", Font.PLAIN, 25));
+		lblNewLabel.setBounds(259, 11, 251, 33);
+		contentPane.add(lblNewLabel);
+		
+		lblBuscar = new JLabel("Buscar:");
+		lblBuscar.setForeground(Color.BLUE);
+		lblBuscar.setFont(new Font("Microsoft JhengHei UI Light", Font.PLAIN, 18));
+		lblBuscar.setBounds(10, 285, 85, 33);
+		contentPane.add(lblBuscar);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(10, 275, 749, 2);
+		contentPane.add(separator);
+		
+		JLabel label = new JLabel("C\u00F3digo:");
+		label.setFont(new Font("Arial", Font.PLAIN, 15));
+		label.setBounds(28, 329, 85, 18);
+		contentPane.add(label);
+		
+		textBuscarID = new JTextField();
+		textBuscarID.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent arg0) {
+				//atualizar a tabela apenas com valores correspondentes aos digitados no campo de busca por codigo
+				TableRowSorter<TableModel> filtro = null;  
+				DefaultTableModel model = (DefaultTableModel) table.getModel();  
+				filtro = new TableRowSorter<TableModel>(model);  
+				table.setRowSorter(filtro);
+				
+				if (textBuscarID.getText().length() == 0) {
+					filtro.setRowFilter(null);
+				} else {  
+					filtro.setRowFilter(RowFilter.regexFilter(textBuscarID.getText(), 0));  
+				}  
+			}
+		});
+		textBuscarID.setColumns(10);
+		textBuscarID.setBounds(123, 329, 636, 20);
+		contentPane.add(textBuscarID);
+		
+		textBuscarNome = new JTextField();
+		textBuscarNome.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				//atualizar a tabela apenas com valores correspondentes aos digitados no campo de busca por nome
+				TableRowSorter<TableModel> filtro = null;  
+				DefaultTableModel model = (DefaultTableModel) table.getModel();  
+				filtro = new TableRowSorter<TableModel>(model);  
+				table.setRowSorter(filtro); 
+				
+				if (textBuscarNome.getText().length() == 0) {
+					filtro.setRowFilter(null);
+				} else {  
+					filtro.setRowFilter(RowFilter.regexFilter("(?i)" + textBuscarNome.getText(), 1));  
+				} 
+			}
+		});
+		textBuscarNome.setColumns(10);
+		textBuscarNome.setBounds(123, 360, 636, 20);
+		contentPane.add(textBuscarNome);
+		
+		JLabel label_1 = new JLabel("Nome:");
+		label_1.setFont(new Font("Arial", Font.PLAIN, 15));
+		label_1.setBounds(28, 360, 85, 18);
+		contentPane.add(label_1);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(10, 397, 749, 2);
+		contentPane.add(separator_1);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+			}
+		});
+		scrollPane.setBounds(10, 410, 749, 293);
+		contentPane.add(scrollPane);
+		
+		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				setCamposFromTabela();
+			}
+		});
+		scrollPane.setViewportView(table);
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Código", "Nome", "CNPJ", "E-mail", "telefone", "Rua", "Bairro", "Cidade", "Estado"
+			}
+		));
+		
+		btnNewButton = new JButton("Cadastrar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {	
+				try {
+					//atribuição dos valores dos campos para o objeto fornecedor
+					fo.setNomeFornecedor(textNome.getText());
+					fo.setCnpjFornecedor(textCNPJ.getText());
+					fo.setEmailFornecedor(textEmail.getText());
+					fo.setTelefoneFornecedor(textTelefone.getText());
+					fo.setRuaFornecedor(textRua.getText());
+					fo.setBairroFornecedor(textBairro.getText());
+					fo.setCidadeFornecedor(textCidade.getText());
+					fo.setEstadoFornecedor(textEstado.getText());
+					
+					// chamada do método de cadastro na classe Dao
+					foDao.CadastrarFornecedor(fo);
+					
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				}
+				atualizarTabela();
+				limpar();
+			}
+		});
+		btnNewButton.setFont(new Font("Microsoft Tai Le", Font.PLAIN, 17));
+		btnNewButton.setBounds(10, 232, 145, 23);
+		contentPane.add(btnNewButton);
+		
+		btnAlterar = new JButton("Alterar");
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (table.getSelectedRow() != -1){
+				try {
+					  
+					//atribuição dos valores dos campos para o objeto cliente
+					fo.setIdFornecedor(Integer.parseInt(textID.getText()));
+					fo.setNomeFornecedor(textNome.getText());
+					fo.setCnpjFornecedor(textCNPJ.getText());
+					fo.setEmailFornecedor(textEmail.getText());
+					fo.setTelefoneFornecedor(textTelefone.getText());
+					fo.setRuaFornecedor(textRua.getText());
+					fo.setBairroFornecedor(textBairro.getText());
+					fo.setCidadeFornecedor(textCidade.getText());
+					fo.setEstadoFornecedor(textEstado.getText());
+					// chamada do método de alteração na classe Dao
+					foDao.AlterarFornecedor(fo);;
+					
+	
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+				}
+				atualizarTabela();
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Nenhuma linha selecionada");
+			}
+		}
+		});
+		btnAlterar.setFont(new Font("Microsoft Tai Le", Font.PLAIN, 17));
+		btnAlterar.setBounds(207, 232, 145, 23);
+		contentPane.add(btnAlterar);
+		
+		btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				limpar();
+			}
+		});
+		btnLimpar.setFont(new Font("Microsoft Tai Le", Font.PLAIN, 17));
+		btnLimpar.setBounds(614, 232, 145, 23);
+		contentPane.add(btnLimpar);
+		
+		btnExcluir = new JButton("Excluir");
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRow() != -1){
+					Object[] options3 = {"Excluir", "Cancelar"};
+					if(JOptionPane.showOptionDialog(null, "Tem certeza que deseja excluir o registro:\n>   " 
+							+ table.getValueAt(table.getSelectedRow(), 0) + "   -   "
+							+ table.getValueAt(table.getSelectedRow(), 1), null,
+							JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options3, options3[0]) == 0){
+						try {
+						
+							//atribuição do valor do campo código para o objeto cliente
+							fo.setIdFornecedor(Integer.parseInt(textID.getText()));
+							
+							// chamada do método de exclusão na classe Dao passando como parâmetro o código do cliente para ser excluído
+							foDao.deletarFornecedor(fo);
+							
+						
+							atualizarTabela();
+							limpar();
+						} catch (Exception e1) {
+							JOptionPane.showMessageDialog(null, e1.getMessage());
+						}
+					}
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Nenhuma linha selecionada");
+				}
+			}
+		});
+		btnExcluir.setFont(new Font("Microsoft Tai Le", Font.PLAIN, 17));
+		btnExcluir.setBounds(420, 232, 145, 23);
+		contentPane.add(btnExcluir);
+	}
+	public void sair() {
+		System.exit(0);
+	}
+
+	public void setCamposFromTabela() {
+		textID.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 0)));
+		textNome.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 1)));
+		textCNPJ.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 2)));
+		textTelefone.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 3)));
+		textEmail.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 5)));	
+		textRua.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 5)));
+		textBairro.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 6)));
+		textCidade.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 7)));
+		textEstado.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 8)));
+	}
+
+	public void limpar() {
+		textNome.setText(null);
+		textCNPJ.setText(null);
+		textEmail.setText(null);
+		textTelefone.setText(null);
+		textRua.setText(null);
+		textBairro.setText(null);
+		textCidade.setText(null);
+		textEstado.setText(null);
+		try {
+			textID.setText(String.valueOf(foDao.RetornarProximoIdFoenecedor()));
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
+
+	public void atualizarTabela() {
+		try {
+			fornecedor = foDao.buscarTodos();
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			model.setNumRows(0);
+		for (int x=0; x!=fornecedor.size(); x++)
+			{
+				model.addRow((Object[]) fornecedor.get(x));
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
+}

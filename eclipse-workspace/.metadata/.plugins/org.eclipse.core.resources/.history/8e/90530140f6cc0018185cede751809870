@@ -1,0 +1,29 @@
+package br.edu.ifcvideira.Lista14r;
+
+public class E2Automovel extends E2Veiculo{
+	
+	public double valorAtual() {
+		return this.getValor()-(((2018-this.getAno())*5.0/100)*this.getValor());
+	}
+	
+	public double valorSeguro() {
+		if((2018-this.getAno())<=5) {
+			return this.getValor()*0.045;
+		}else if((2018-this.getAno()>=5)&&(2018-this.getAno()<=10)){
+			return this.getValor()*0.05;
+		}else {
+			return this.getValor()*0.055;
+		}
+	}
+	
+	public double valorIPVA(){
+		if((2018-this.getAno())<=10) {
+			return this.getValor()*0.05;
+		}else if((2018-this.getAno())<=20) {
+			return this.getValor()*0.04;
+		}else {
+			return this.getValor();
+		}
+	}
+
+}

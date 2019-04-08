@@ -1,0 +1,477 @@
+package br.edu.ifcvideira.controllers.views;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import java.awt.Color;
+import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.JSeparator;
+import javax.swing.JCheckBox;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import br.edu.ifcvideira.DAOs.CategoriasDao;
+import br.edu.ifcvideira.DAOs.ProdutosDao;
+import br.edu.ifcvideira.beans.Produtos;
+
+import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.awt.event.ActionEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+public class ProdutosView extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField textID;
+	private JTextField textValor;
+	private JTextField textNome;
+	private JTextField textTamanho;
+	private JTextField textIDCategoria;
+	private JTextField textDescCategoria;
+	private JTextField textIDFornecedor;
+	private JTextField textField_7;
+	private JTextField textBuscarID;
+	private JTextField textBuscarNome;
+	private JTable table;
+	
+	JCheckBox chProduto = new JCheckBox("Produto Ativo");
+	
+	private List<Object> produto = new ArrayList<Object>();
+	
+	CategoriasDao caDao = new CategoriasDao();
+	Produtos pr = new Produtos();
+	ProdutosDao prDao = new ProdutosDao();
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ProdutosView frame = new ProdutosView();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public ProdutosView() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				atualizarTabela();
+				limpar();
+			}
+		});
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 840, 862);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblCadastrarProduto = new JLabel("Cadastrar Produto\r\n");
+		lblCadastrarProduto.setForeground(Color.BLUE);
+		lblCadastrarProduto.setFont(new Font("Microsoft JhengHei UI Light", Font.PLAIN, 25));
+		lblCadastrarProduto.setBounds(306, 11, 212, 33);
+		contentPane.add(lblCadastrarProduto);
+		
+		JLabel lblNewLabel = new JLabel("C\u00F3digo:");
+		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNewLabel.setBounds(10, 66, 87, 18);
+		contentPane.add(lblNewLabel);
+		
+		textID = new JTextField();
+		textID.setEditable(false);
+		textID.setBounds(107, 66, 272, 20);
+		contentPane.add(textID);
+		textID.setColumns(10);
+		
+		JLabel lblValorUnitario = new JLabel("Valor:");
+		lblValorUnitario.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblValorUnitario.setBounds(445, 64, 87, 18);
+		contentPane.add(lblValorUnitario);
+		
+		textValor = new JTextField();
+		textValor.setColumns(10);
+		textValor.setBounds(542, 64, 272, 20);
+		contentPane.add(textValor);
+		
+		JLabel lblNome = new JLabel("Nome:");
+		lblNome.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblNome.setBounds(10, 95, 87, 18);
+		contentPane.add(lblNome);
+		
+		textNome = new JTextField();
+		textNome.setColumns(10);
+		textNome.setBounds(107, 95, 272, 20);
+		contentPane.add(textNome);
+		
+		JLabel lblTamanho = new JLabel("Tamanho:");
+		lblTamanho.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblTamanho.setBounds(445, 93, 87, 18);
+		contentPane.add(lblTamanho);
+		
+		textTamanho = new JTextField();
+		textTamanho.setColumns(10);
+		textTamanho.setBounds(542, 93, 272, 20);
+		contentPane.add(textTamanho);
+		
+		JLabel lblFornecedor = new JLabel("Categorias:");
+		lblFornecedor.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblFornecedor.setBounds(8, 186, 87, 18);
+		contentPane.add(lblFornecedor);
+		
+		textIDCategoria = new JTextField();
+		textIDCategoria.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent arg0) {
+				
+				if (textIDCategoria.getText()!="") {
+				try {
+					textDescCategoria.setText(caDao.RetornarNomeCategoria(Integer.parseInt(textIDCategoria.getText())));
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				}
+			}
+		});
+		textIDCategoria.setColumns(10);
+		textIDCategoria.setBounds(134, 216, 63, 20);
+		contentPane.add(textIDCategoria);
+		
+		JLabel lblCdigo = new JLabel("C\u00F3digo:");
+		lblCdigo.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblCdigo.setBounds(37, 215, 87, 18);
+		contentPane.add(lblCdigo);
+		
+		textDescCategoria = new JTextField();
+		textDescCategoria.setEditable(false);
+		textDescCategoria.setColumns(10);
+		textDescCategoria.setBounds(207, 216, 362, 20);
+		contentPane.add(textDescCategoria);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(8, 173, 804, 2);
+		contentPane.add(separator_1);
+		
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setBounds(8, 247, 804, 2);
+		contentPane.add(separator_2);
+		
+		JLabel label = new JLabel("Fornecedor:");
+		label.setFont(new Font("Arial", Font.PLAIN, 15));
+		label.setBounds(8, 260, 87, 18);
+		contentPane.add(label);
+		
+		JLabel label_1 = new JLabel("C\u00F3digo:");
+		label_1.setFont(new Font("Arial", Font.PLAIN, 15));
+		label_1.setBounds(37, 289, 87, 18);
+		contentPane.add(label_1);
+		
+		textIDFornecedor = new JTextField();
+		textIDFornecedor.setColumns(10);
+		textIDFornecedor.setBounds(134, 290, 63, 20);
+		contentPane.add(textIDFornecedor);
+		
+		textField_7 = new JTextField();
+		textField_7.setEditable(false);
+		textField_7.setColumns(10);
+		textField_7.setBounds(207, 290, 362, 20);
+		contentPane.add(textField_7);
+		
+		chProduto.setSelected(true);
+		chProduto.setFont(new Font("Arial", Font.PLAIN, 15));
+		chProduto.setBounds(329, 142, 165, 23);
+		contentPane.add(chProduto);
+		
+		JSeparator separator_3 = new JSeparator();
+		separator_3.setBounds(10, 327, 804, 2);
+		contentPane.add(separator_3);
+		
+		JButton button = new JButton("Cadastrar");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					//atribuição dos valores dos campos para o objeto cliente
+					pr.setNomeProduto(textNome.getText());
+					pr.setValorUnitarioProduto(Double.parseDouble(textValor.getText()));
+					pr.setTamanhoProduto(textTamanho.getText());
+					pr.setIdCategoriasProdutos(Integer.parseInt(textIDCategoria.getText()));
+					pr.setIdFornecedorProdutos(Integer.parseInt(textIDFornecedor.getText()));
+					if (chProduto.isSelected()) {
+						pr.setStatusProdutos(0);
+					}else {
+						pr.setStatusProdutos(1);
+					}
+					
+
+					
+					// chamada do método de cadastro na classe Dao
+					prDao.CadastrarProduto(pr);
+					
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				}
+				atualizarTabela();
+				limpar();
+			}
+		});
+		button.setFont(new Font("Microsoft Tai Le", Font.PLAIN, 17));
+		button.setBounds(48, 352, 145, 23);
+		contentPane.add(button);
+		
+		JButton button_1 = new JButton("Alterar");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRow() != -1){
+					try {
+						  
+						//atribuição dos valores dos campos para o objeto cliente
+						pr.setIdProdutos(Integer.parseInt(textID.getText()));
+						pr.setNomeProduto(textNome.getText());
+						pr.setValorUnitarioProduto(Double.parseDouble(textValor.getText()));
+						pr.setTamanhoProduto(textTamanho.getText());
+						pr.setIdCategoriasProdutos(Integer.parseInt(textIDCategoria.getText()));
+						pr.setIdFornecedorProdutos(Integer.parseInt(textIDFornecedor.getText()));
+						if (chProduto.isSelected()) {
+							pr.setStatusProdutos(0);
+						}else {
+							pr.setStatusProdutos(1);
+						}
+						// chamada do método de alteração na classe Dao
+						prDao.AlterarProduto(pr);
+						
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage());
+					}
+					atualizarTabela();
+				}
+				
+				else{
+					JOptionPane.showMessageDialog(null, "Nenhuma linha selecionada");
+				}
+			}
+		});
+		button_1.setFont(new Font("Microsoft Tai Le", Font.PLAIN, 17));
+		button_1.setBounds(241, 352, 145, 23);
+		contentPane.add(button_1);
+		
+		JButton button_2 = new JButton("Excluir");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRow() != -1){
+					Object[] options3 = {"Excluir", "Cancelar"};
+					if(JOptionPane.showOptionDialog(null, "Tem certeza que deseja excluir o registro:\n>   " 
+							+ table.getValueAt(table.getSelectedRow(), 0) + "   -   "
+							+ table.getValueAt(table.getSelectedRow(), 1), null,
+							JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options3, options3[0]) == 0){
+						try {
+						
+							//atribuição do valor do campo código para o objeto cliente
+							pr.setIdProdutos(Integer.parseInt(textID.getText()));
+							
+							// chamada do método de exclusão na classe Dao passando como parâmetro o código do cliente para ser excluído
+							prDao.deletarProduto(pr);
+							
+						
+							atualizarTabela();
+							limpar();
+						} catch (Exception e1) {
+							JOptionPane.showMessageDialog(null, e1.getMessage());
+						}
+					}
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Nenhuma linha selecionada");
+				}
+			}
+		});
+		button_2.setFont(new Font("Microsoft Tai Le", Font.PLAIN, 17));
+		button_2.setBounds(434, 352, 145, 23);
+		contentPane.add(button_2);
+		
+		JButton button_3 = new JButton("Limpar");
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpar();
+			}
+		});
+		button_3.setFont(new Font("Microsoft Tai Le", Font.PLAIN, 17));
+		button_3.setBounds(627, 352, 145, 23);
+		contentPane.add(button_3);
+		
+		JSeparator separator_4 = new JSeparator();
+		separator_4.setBounds(10, 397, 804, 2);
+		contentPane.add(separator_4);
+		
+		JLabel lblBuscar = new JLabel("Buscar:\r\n");
+		lblBuscar.setForeground(Color.BLUE);
+		lblBuscar.setFont(new Font("Microsoft JhengHei UI Light", Font.PLAIN, 18));
+		lblBuscar.setBounds(10, 410, 74, 23);
+		contentPane.add(lblBuscar);
+		
+		JLabel label_2 = new JLabel("C\u00F3digo:");
+		label_2.setFont(new Font("Arial", Font.PLAIN, 15));
+		label_2.setBounds(37, 444, 87, 18);
+		contentPane.add(label_2);
+		
+		textBuscarID = new JTextField();
+		textBuscarID.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				//atualizar a tabela apenas com valores correspondentes aos digitados no campo de busca por codigo
+				TableRowSorter<TableModel> filtro = null;  
+				DefaultTableModel model = (DefaultTableModel) table.getModel();  
+				filtro = new TableRowSorter<TableModel>(model);  
+				table.setRowSorter(filtro);
+				
+				if (textBuscarID.getText().length() == 0) {
+					filtro.setRowFilter(null);
+				} else {  
+					filtro.setRowFilter(RowFilter.regexFilter(textBuscarID.getText(), 0));  
+				} 
+			}
+		});
+		textBuscarID.setColumns(10);
+		textBuscarID.setBounds(134, 444, 680, 20);
+		contentPane.add(textBuscarID);
+		
+		textBuscarNome = new JTextField();
+		textBuscarNome.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				//atualizar a tabela apenas com valores correspondentes aos digitados no campo de busca por nome
+				TableRowSorter<TableModel> filtro = null;  
+				DefaultTableModel model = (DefaultTableModel) table.getModel();  
+				filtro = new TableRowSorter<TableModel>(model);  
+				table.setRowSorter(filtro); 
+				
+				if (textBuscarNome.getText().length() == 0) {
+					filtro.setRowFilter(null);
+				} else {  
+					filtro.setRowFilter(RowFilter.regexFilter("(?i)" + textBuscarNome.getText(), 1));  
+				} 
+			}
+		});
+		textBuscarNome.setColumns(10);
+		textBuscarNome.setBounds(134, 473, 680, 20);
+		contentPane.add(textBuscarNome);
+		
+		JLabel label_3 = new JLabel("Nome:");
+		label_3.setFont(new Font("Arial", Font.PLAIN, 15));
+		label_3.setBounds(37, 473, 87, 18);
+		contentPane.add(label_3);
+		
+		JSeparator separator_5 = new JSeparator();
+		separator_5.setBounds(10, 515, 804, 2);
+		contentPane.add(separator_5);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 537, 804, 275);
+		contentPane.add(scrollPane);
+		
+		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				setCamposFromTabela();
+			}
+		});
+		scrollPane.setViewportView(table);
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"C\u00F3digo", "Nome", "Valor", "Tamanho produto", "CD Categorias", "CD Fornecedores", "Status"
+			}
+		));
+		
+		JButton btnNewButton = new JButton("Cadastrar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CategoriasView caView = new CategoriasView();
+				caView.setVisible(true);
+			}
+		});
+		btnNewButton.setBounds(579, 215, 89, 23);
+		contentPane.add(btnNewButton);
+	}
+	public void sair() {
+		System.exit(0);
+	}
+
+	public void setCamposFromTabela() {
+		int stat;
+		
+		textID.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 0)));
+		textNome.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 1)));
+		textValor.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 2)));
+		textTamanho.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 3)));
+		textIDCategoria.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 4)));
+		textIDFornecedor.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 5)));
+		stat = Integer.parseInt(String.valueOf(table.getValueAt(table.getSelectedRow(), 6)));
+		
+		if (stat==0) {
+			chProduto.setSelected(true);
+		}else {
+			chProduto.setSelected(false);
+		}
+		
+	}
+
+	public void limpar() {
+		textID.setText(null);
+		textNome.setText(null);
+		textValor.setText(null);
+		textTamanho.setText(null);
+		textIDCategoria.setText(null);
+		textIDFornecedor.setText(null);
+		chProduto.setSelected(true);
+
+		try {
+			textID.setText(String.valueOf(prDao.RetornarProximoCodigoProduto()));
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
+
+	public void atualizarTabela() {
+		try {
+			produto = prDao.buscarTodos();
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			model.setNumRows(0);
+		for (int x=0; x!=produto.size(); x++)
+			{
+				model.addRow((Object[]) produto.get(x));
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
+}

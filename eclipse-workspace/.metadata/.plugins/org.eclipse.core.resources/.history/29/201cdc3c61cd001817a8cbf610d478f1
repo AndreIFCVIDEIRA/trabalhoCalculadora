@@ -1,0 +1,39 @@
+package br.edu.ifcvideira.DAOs;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import br.edu.ifcvideira.beans.Categorias;
+import br.edu.ifcvideira.utils.Conexao;
+
+public class CategoriasDao {
+	public void CadastrarCategorias(Categorias ca) throws SQLException, Exception{
+		try{
+			String sql = "INSERT INTO categorias (descricacao_categorias) VALUES (?)";
+			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setString(1, ca.getDescricaoCategorias());
+			sqlPrep.execute();
+			
+		} catch(SQLException e) {
+			JOptionPane.showMessageDialog(null,e.getMessage());
+			
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null,e.getMessage());
+		}
+	}
+	
+	public void AlterarCategorias(Categorias ca) throws Exception {
+		try{
+			String sql = "UPDATE categorias SET descricao_categorias=? WHERE id_categorias=?";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setString(1, ca.getDescricaoCategorias());
+			sqlPrep.setInt(2, ca.getIdCategorias());
+			sqlPrep.execute();
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
+
+}

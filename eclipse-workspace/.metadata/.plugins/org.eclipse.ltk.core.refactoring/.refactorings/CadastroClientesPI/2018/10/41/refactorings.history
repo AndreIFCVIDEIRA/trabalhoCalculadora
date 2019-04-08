@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;Conexao.java&apos; to &apos;ProjetoPI/src/br.edu.ifcvideira.utils&apos;&#x0D;&#x0A;- Original project: &apos;CadastroClientesPI&apos;&#x0D;&#x0A;- Destination element: &apos;ProjetoPI/src/br.edu.ifcvideira.utils&apos;&#x0D;&#x0A;- Original element: &apos;br.edu.ifcvideira.utils.Conexao.java&apos;" description="Copy compilation unit" destination="=ProjetoPI/src&lt;br.edu.ifcvideira.utils" element1="/src&lt;br.edu.ifcvideira.utils{Conexao.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1539261102184" units="1" version="1.0"/>
+</session>
